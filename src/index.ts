@@ -173,7 +173,7 @@ function setArrayElements (
 }
 
 function getPropertyDefName (prop, typeDef) {
-  return prop.getText().indexOf('?') === -1 ? typeDef : '[' + typeDef + ']';
+  return prop.getText().indexOf('?') === -1 ? typeDef : '[' + typeDef + ']'
 }
 
 /**
