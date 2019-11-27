@@ -168,7 +168,7 @@ function setArrayElements (
     inttype?: string
 ) {
   const name = values.element
-  newElements.push(getApiSuccessElement(`{Object[]} ${name} ${name}`))
+  newElements.push(getApiElement(`{Object[]} ${name} ${name}`, values.element))
   setInterfaceElements.call(this, matchedInterface, filename, newElements, values, name)
 }
 /**
@@ -211,7 +211,7 @@ function setInterfaceElements (
       : getCapitalized(propType)
 
     // Set the element
-    newElements.push(getApiSuccessElement(`{${propLabel}} ${typeDef} ${description}`))
+    newElements.push(getApiElement(`{${propLabel}} ${typeDef} ${description}`, values.element))
 
     // If property is an object or interface then we need to also display the objects properties
     if (propTypeIsObject) {
@@ -247,7 +247,7 @@ function setNativeElements (
 
   const propLabel = getCapitalized(values.interface)
   // Set the element
-  newElements.push(getApiSuccessElement(`{${propLabel}} ${values.element}`))
+  newElements.push(getApiElement(`{${propLabel}} ${values.element}`, values.element))
   return
 }
 
@@ -280,11 +280,11 @@ function setObjectElements<NodeType extends ts.Node = ts.Node> (
 
     // Nothing to do if prop is of native type
     if (isNativeType(propType)) {
-      newElements.push(getApiSuccessElement(`{${getCapitalized(propType)}} ${typeDefLabel} ${desc}`))
+      newElements.push(getApiElement(`{${getCapitalized(propType)}} ${typeDefLabel} ${desc}`, values.element))
       return
     }
 
-    const newElement = getApiSuccessElement(`{Object${propType.includes('[]') ? '[]' : ''}} ${typeDefLabel} ${desc}`)
+    const newElement = getApiElement(`{Object${propType.includes('[]') ? '[]' : ''}} ${typeDefLabel} ${desc}`, values.element)
     newElements.push(newElement)
 
     // If property is an object or interface then we need to also display the objects properties
@@ -363,12 +363,12 @@ function extendInterface (
   }
 }
 
-function getApiSuccessElement (param: string | number): Apidoc.Element {
+function getApiElement (param: string | number, type: string = 'apiSuccess'): Apidoc.Element {
   return {
     content: `${param}\n`,
-    name: 'apisuccess',
-    source: `@apiSuccess ${param}\n`,
-    sourceName: 'apiSuccess'
+    name: type.toLowerCase(),
+    source: `@${type} ${param}\n`,
+    sourceName: type
   }
 }
 
