@@ -174,7 +174,7 @@ function setArrayElements (
 
 function getPropertyDefName (prop, typeDef) {
   if (prop.getValueDeclaration && prop.getValueDeclaration().getText) {
-    prop = prop.getValueDeclaration();
+    prop = prop.getValueDeclaration()
   }
   return !prop.getText || prop.getText().indexOf('?') === -1 ? typeDef : '[' + typeDef + ']'
 }
