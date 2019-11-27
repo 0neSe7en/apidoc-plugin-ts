@@ -171,6 +171,11 @@ function setArrayElements (
   newElements.push(getApiElement(`{Object[]} ${name} ${name}`, values.element))
   setInterfaceElements.call(this, matchedInterface, filename, newElements, values, name)
 }
+
+function getPropertyDefName (prop, typeDef) {
+  return prop.getText().indexOf('?') === -1 ? typeDef : '[' + typeDef + ']';
+}
+
 /**
  *
  * @param matchedInterface
@@ -211,7 +216,7 @@ function setInterfaceElements (
       : getCapitalized(propType)
 
     // Set the element
-    newElements.push(getApiElement(`{${propLabel}} ${typeDef} ${description}`, values.element))
+    newElements.push(getApiElement(`{${propLabel}} ${getPropertyDefName(prop, typeDef)} ${description}`, values.element))
 
     // If property is an object or interface then we need to also display the objects properties
     if (propTypeIsObject) {
@@ -280,11 +285,11 @@ function setObjectElements<NodeType extends ts.Node = ts.Node> (
 
     // Nothing to do if prop is of native type
     if (isNativeType(propType)) {
-      newElements.push(getApiElement(`{${getCapitalized(propType)}} ${typeDefLabel} ${desc}`, values.element))
+      newElements.push(getApiElement(`{${getCapitalized(propType)}} ${getPropertyDefName(property, typeDefLabel)} ${desc}`, values.element))
       return
     }
 
-    const newElement = getApiElement(`{Object${propType.includes('[]') ? '[]' : ''}} ${typeDefLabel} ${desc}`, values.element)
+    const newElement = getApiElement(`{Object${propType.includes('[]') ? '[]' : ''}} ${getPropertyDefName(property, typeDefLabel)} ${desc}`, values.element)
     newElements.push(newElement)
 
     // If property is an object or interface then we need to also display the objects properties
